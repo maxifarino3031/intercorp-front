@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Subscription } from "rxjs";
 import { ClientService } from "src/app/common/adapters/client.service";
-import { TypeMenssage } from "src/app/common/enums/type-message";
 import { Client } from "src/app/common/models/client";
 import { ListClientsSubjectsService } from "src/app/common/subjects/list-client-subject.service";
 
@@ -11,17 +10,18 @@ import { ListClientsSubjectsService } from "src/app/common/subjects/list-client-
   templateUrl: "./list-clients.component.html",
   styleUrls: ["./list-clients.component.scss"],
 })
-export class ListClientsComponent implements OnInit, OnDestroy {
+export class ListClientsComponent implements OnInit,OnDestroy {
   listClients: Client[] = [];  
+  subscription!:Subscription;
 
   constructor(
     private readonly clientService: ClientService,
     private spinner: NgxSpinnerService,
     private listClientsSubjectsService: ListClientsSubjectsService
   ) {}
-
+  
   ngOnInit(): void {
-    this.listClientsSubjectsService
+    this.subscription=this.listClientsSubjectsService
       .getObservable()
       .subscribe(() => {
         this.onLoadData();    
@@ -34,21 +34,24 @@ export class ListClientsComponent implements OnInit, OnDestroy {
     this.listClients = response.data;
   };
 
-  onError = (error: any) => {};
+  onError = (error: any) => {
+    //la idea es poner un componente que muestre los mensajes de error    
+    this.spinner.hide();
+  };
 
-  onFinally = () => {
+  onFinally = () => {    
     this.spinner.hide();
   };
 
   onLoadData = (): void => {
     this.spinner.show();
-
     this.clientService
       .getAll()
       .subscribe(this.onSuccess, this.onError, this.onFinally);
   };
 
   ngOnDestroy(): void {
-    this.listClientsSubjectsService.unSubscribe();
+    this.subscription.unsubscribe();
   }
+  
 }
