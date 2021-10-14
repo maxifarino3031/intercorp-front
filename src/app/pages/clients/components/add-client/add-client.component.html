@@ -1,0 +1,56 @@
+<button
+  class="btn btn-primary btn-gridMenu"
+  type="button"
+  (click)="openModal(template)"
+>
+  New Client
+</button>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add new client</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form  [formGroup]="form" (ngSubmit)="handleOnSubmit()" class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">First name</label>
+          <input formControlName="firstName" type="text" class="form-control">
+          <div *ngIf="submitted && f.firstName.errors?.required">Fullname is required</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Last name</label>
+          <input formControlName="lastName" type="text" class="form-control">
+          <div *ngIf="submitted && f.lastName.errors?.required">Fullname is required</div>
+        </div>
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Age</label>
+          <input formControlName="age" type="number" class="form-control">
+          <div *ngIf="submitted && f.age.errors?.required">Fullname is required</div>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Date of birth</label>
+          <input type="text"
+           class="form-control"
+           formControlName="dateOfBirth"
+           bsDatepicker
+           [bsConfig]="{ adaptivePosition: true }">
+           <div *ngIf="submitted && f.dateOfBirth.errors?.required">Fullname is required</div>
+        </div>        
+        
+        <div class="col-12 btn-actions">        
+          <button type="submit" class="btn btn-primary btn-lg btn-button-save">Save</button>
+          <button type="button" (click)="onHandleCancel()" class="btn btn-light btn-lg btn-button-cancel">Cancel</button>
+        </div>       
+    
+      </form>
+
+  </div>
+</ng-template>
