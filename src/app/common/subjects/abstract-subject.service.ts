@@ -4,18 +4,14 @@ import { TypeMenssage } from "../enums/type-message";
 export abstract class AbstractSubjectService {
   constructor() {}
 
-  private subject = new Subject<TypeMenssage|null>();
+  private subject = new Subject<TypeMenssage | null>();
 
   dispatch = (typeMenssage?: TypeMenssage) => {
-    this.subject.next(typeMenssage|| null);
+    this.subject.next(typeMenssage || null);
   };
 
   getObservable = () => {
     return this.subject.asObservable();
   };
-
-  unSubscribe=()=>{
-      this.unSubscribe();
-  }
-
+    
 }
